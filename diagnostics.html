@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Backend Diagnostics | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+    <style>
+        .diagnostics-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .diagnostic-section {
+            background: #010101;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .status-ok {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .status-warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .test-button {
+            background: #007bff;
+            color: rgb(14, 13, 13);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .test-button:hover {
+            background: #0056b3;
+        }
+
+        .test-result {
+            background: rgb(28, 26, 26);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .test-result.success {
+            border-left-color: #28a745;
+            background: #050505;
+        }
+
+        .test-result.error {
+            border-left-color: #dc3545;
+            background: #121111;
+        }
+
+        .info-box {
+            background: #070707;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .code-block {
+            background: #333;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">Portfolio</div>
+        <nav id="navbar">
+            <a href="index2.html">Home</a>
+            <a href="messages.html">Messages</a>
+            <a href="diagnostics.html">Diagnostics</a>
+        </nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    </header>
+
+    <!-- ===== DIAGNOSTICS SECTION ===== -->
+    <section class="section">
+        <h2>Backend Diagnostics</h2>
+        
+        <div class="diagnostics-container">
+            <!-- Backend Status -->
+            <div class="diagnostic-section">
+                <h3>1. Backend Status</h3>
+                <button class="test-button" onclick="testBackendConnection()">Test Connection</button>
+                <div id="backendStatus"></div>
+            </div>
+
+            <!-- API Tests -->
+            <div class="diagnostic-section">
+                <h3>2. API Endpoint Tests</h3>
+                <button class="test-button" onclick="testHealthEndpoint()">Test Health Endpoint</button>
+                <button class="test-button" onclick="testGetUsers()">Test Get Users</button>
+                <div id="apiTests"></div>
+            </div>
+
+            <!-- Send Test Message -->
+            <div class="diagnostic-section">
+                <h3>3. Send Test Message</h3>
+                <button class="test-button" onclick="sendTestMessage()">Send Test Message</button>
+                <div id="testMessageResult"></div>
+            </div>
+
+            <!-- Configuration Info -->
+            <div class="diagnostic-section">
+                <h3>4. Configuration</h3>
+                <div id="configInfo"></div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="info-box">
+                <strong>⚠️ Backend Not Running?</strong><br>
+                Open a terminal and run:
+                <div class="code-block">
+cd c:\Users\acer\portfolio\backend
+npm start
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>© 2026 Joanna Shalom | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        // Display config info
+        function displayConfigInfo() {
+            const configInfo = document.getElementById('configInfo');
+            configInfo.innerHTML = `
+                <div class="test-result">
+API URL: ${API_URL}
+Backend Server: http://localhost:5000
+Database: SQLite (portfolio.db)
+                </div>
+            `;
+        }
+
+        // Test backend connection
+        async function testBackendConnection() {
+            const backendStatus = document.getElementById('backendStatus');
+            backendStatus.innerHTML = '<div class="test-result">Testing...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    backendStatus.innerHTML = `
+                        <div class="test-result success">
+✅ Backend is running and accessible!
+Status: ${data.status}
+Endpoint: http://localhost:5000
+                        </div>
+                    `;
+                } else {
+                    backendStatus.innerHTML = `
+                        <div class="test-result error">
+❌ Backend returned an error
+Status Code: ${response.status}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                backendStatus.innerHTML = `
+                    <div class="test-result error">
+❌ Cannot connect to backend!
+
+Error: ${error.message}
+
+Make sure:
+1. Backend server is running
+2. Run this command in terminal:
+   cd c:\\Users\\acer\\portfolio\\backend
+   npm start
+                    </div>
+                `;
+            }
+        }
+
+        // Test health endpoint
+        async function testHealthEndpoint() {
+            const apiTests = document.getElementById('apiTests');
+            apiTests.innerHTML = '<div class="test-result">Testing...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+
+                apiTests.innerHTML = `
+                    <div class="test-result success">
+✅ Health Endpoint Working
+URL: ${API_URL}/health
+Status: ${response.status}
+Response: ${JSON.stringify(data, null, 2)}
+                    </div>
+                `;
+            } catch (error) {
+                apiTests.innerHTML = `
+                    <div class="test-result error">
+❌ Health Endpoint Failed
+Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Test get users
+        async function testGetUsers() {
+            const apiTests = document.getElementById('apiTests');
+            apiTests.innerHTML = '<div class="test-result">Testing...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const data = await response.json();
+
+                apiTests.innerHTML = `
+                    <div class="test-result success">
+✅ Get Users Endpoint Working
+URL: ${API_URL}/users
+Status: ${response.status}
+Messages Count: ${Array.isArray(data) ? data.length : 0}
+Response: ${JSON.stringify(data, null, 2)}
+                    </div>
+                `;
+            } catch (error) {
+                apiTests.innerHTML = `
+                    <div class="test-result error">
+❌ Get Users Endpoint Failed
+Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Send test message
+        async function sendTestMessage() {
+            const testMessageResult = document.getElementById('testMessageResult');
+            testMessageResult.innerHTML = '<div class="test-result">Sending test message...</div>';
+
+            const testData = {
+                name: 'Test User',
+                email: 'test@example.com',
+                message: 'This is a test message sent from the diagnostics page.'
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    testMessageResult.innerHTML = `
+                        <div class="test-result success">
+✅ Test Message Sent Successfully!
+Status: ${response.status}
+Message ID: ${data.id}
+Name: ${data.name}
+Email: ${data.email}
+Message: ${data.message}
+Created: ${data.created_at}
+
+Response: ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    testMessageResult.innerHTML = `
+                        <div class="test-result error">
+❌ Failed to send test message
+Status: ${response.status}
+Error: ${data.error}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                testMessageResult.innerHTML = `
+                    <div class="test-result error">
+❌ Error sending test message
+Error: ${error.message}
+Stack: ${error.stack}
+                    </div>
+                `;
+            }
+        }
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            document.getElementById("navbar").classList.toggle("active");
+        }
+
+        // Display config on load
+        window.addEventListener('load', function() {
+            displayConfigInfo();
+            testBackendConnection();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Joanna Shalom | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">Portfolio</div>
+        <nav id="navbar">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+            <a href="messages.html">Messages</a>
+            <a href="diagnostics.html">Diagnostics</a>
+        </nav>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="home" class="section hero">
+        <h1>Hello, I'm <span>Joanna Shalom</span></h1>
+        <p>A Cybersecurity JuniorAnalyst</p>
+        <a href="#projects" class="btn">View My Work</a>
+    </section>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <p>
+            I am a passionate Cybersecurity Junior Analyst.
+            I love finding vulnerabilities and securing systems.
+        </p>
+    </section>
+
+    <!-- ===== PROJECTS SECTION ===== -->
+    <section id="projects" class="section">
+        <h2>My Projects</h2>
+        <div class="projects-container">
+            <div class="project-card">
+                <h3>Project One</h3>
+                <p>Research and analysis of cybersecurity threats.</p>
+            </div>
+            <div class="project-card">
+                <h3>Project Two</h3>
+                <p>Development of secure network protocols.</p>
+            </div>
+            <div class="project-card">
+                <h3>Project Three</h3>
+                <p>Implementation of intrusion detection systems.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <section id="contact" class="section">
+        <h2>Contact Me</h2>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>© 2026 Joanna Shalom | All Rights Reserved</p>
+    </footer>
+
+    <script src="script2.js"></script>
+</body>
+</html>
